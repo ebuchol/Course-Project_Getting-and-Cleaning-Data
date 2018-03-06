@@ -44,4 +44,7 @@ These functions provide an overall data set of 561 different variables for each 
 ## Generation of *"data_tidy.txt"*
 Each column in *"data_tidy.txt"*  represents a single variable measured in the Human Activity Recognition study, and each row in *"data_tidy.txt"* represents the average measurement for a given subject participant and activity being performed.  
 
-Specifically, the data contains average values for all of the variables in the study that represent mean and standard deviation values. As such, the only variables included in this study are variables that included the use of the mean() and std() functions in their given names.  
+Specifically, the data contains average values for all of the variables in the study that represent mean and standard deviation values. As such, the only variables included in this study are variables that included the use of the mean() and std() functions in their given names, which resulted in 66 variables that make up the columns of *"data_tidy.txt"*.  
+
+Steps followed in "run_analysis.R" script when the function **run_analysis()** is called:
+1. 
