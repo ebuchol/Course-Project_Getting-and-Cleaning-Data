@@ -10,6 +10,14 @@ It can be viewed in R with the following commands:
     data <- read.table("data_tidy.txt", header = TRUE)
     View(data)
 
+## How to Run the Analysis Codes
+In order to run the analysis codes and obtain the tidy data set along with all of the downloaded raw data, run the following commands in R:
+
+    source("run_analysis.R")
+    run_analysis()
+
+The above commands will execute all of the functions contained within the *"run_analysis.R"* script. For more information, see the table of information on the functions within *"run_analysis.R"* in the *"Readme.md"* file.
+
 ## Brief Overview of the Human Activity Recognition Data
 Information about the Human Activity Recognition using Smartphones study can be found at the following URL:  
 http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones  
@@ -41,10 +49,91 @@ angle() | Angle between 2 vectors
 
 These functions provide an overall data set of 561 different variables for each of the 30 study participants and 6 activities being measured.
 
-## Generation of *"data_tidy.txt"*
+## Generation of Tidy Data Set: *"data_tidy.txt"*
 Each column in *"data_tidy.txt"*  represents a single variable measured in the Human Activity Recognition study, and each row in *"data_tidy.txt"* represents the average measurement for a given subject participant and activity being performed.  
 
 Specifically, the data contains average values for all of the variables in the study that represent mean and standard deviation values. As such, the only variables included in this study are variables that included the use of the mean() and std() functions in their given names, which resulted in 66 variables that make up the columns of *"data_tidy.txt"*.  
 
-Steps followed in "run_analysis.R" script when the function **run_analysis()** is called:
-1. 
+Steps followed in "run_analysis.R" script when the function **run_analysis()** is called:  
+1. Call function *is.installed()* which checks if the dplyr package is installed on the machine, install it if needed, then load dplyr.
+2. Call fileDownload to download the Human Activity Recognition using Smartphones data from the internet, then extract the zipped data.
+3. From the downloaded data set, the information regarding activities performed and variables measured as well as the separate test and training data are read in using the functions *readActivityLabels()*, *readFiles()*, and *readMeasures()*. In addition, the information from the activities and variables that were read are used to add *subject* and *activity* columns to both the test and training data.
+4. Call function *indexMean_STD()* to identify the column indices that correspond to only the variables generated using the *mean()* or *std()* functions. The variables measured are also renamed in order to make the variable names more descriptive and consistent.
+5. Call function *mergeData()* in order to merge the test and training data into one merged data set that includes only the column indices identified in *Step 4*. In addition, the names of the variables measured and activities performed are assigned to each of their corresponding variable/activity indices which enables the column names and the values within the activity column to be more descriptive.
+6. Call function *makeTidy()* which groups the merged data frame by activity performed and subject participant, and then calculates the average of each grouping. In this tidy data frame, each value within each column corresponds to the average measure for each variable for each subject participant performing a single activity.
+7. Using the function *write.table()*, the tidy data set and the merged data set are written into the current working directory. The name of the tidy data set will be *"data_tidy.txt"*, and the name of the merged data set will be *"data_merged.txt"*.
+
+### Variables (Column Names) within *"data_tidy.txt"*:
+**Note:** The accelerometer and gyroscope readings in the original study were in units of m/sec^2 and radians/sec, respectively. The values for the variables included in the raw test and training data for this study correspond to averages of the accelerometer and gyroscope readings that were normalized and bounded within the range of -1 to 1. The values within *"data_tidy.txt"* represent averages of these normalized and bounded averages.
+
+Col # | Variable Name | Description
+-------- | ------------- | -----------
+1 | subject | The 30 individual subject participants indexed as numbers 1 through 30.
+2 | activity | The 6 activities performed; indicated as either *laying*, *sitting*, *standing*, *walking*, *walking.downstairs*, or *walking.upstairs*.
+3 | time.BodyAcc.Mean.Xaxis | Mean of the body acceleration in time along the X-axis.
+4 | time.BodyAcc.Mean.Yaxis | Mean of the body acceleration in time along the Y-axis.
+5 | time.BodyAcc.Mean.Zaxis | Mean of the body acceleration in time along the Z-axis.
+6 | time.BodyAcc.STD.Xaxis | Standard deviation of the body acceleration in time along the X-axis.
+7 | time.BodyAcc.STD.Yaxis | Standard deviation of the body acceleration in time along the Y-axis.
+8 | time.BodyAcc.STD.Zaxis | Standard deviation of the body acceleration in time along the Z-axis.
+9 | time.GravityAcc.Mean.Xaxis | Mean of the gravity acceleration in time along the X-axis.
+10 | time.GravityAcc.Mean.Yaxis | Mean of the gravity acceleration in time along the Y-axis.
+11 | time.GravityAcc.Mean.Zaxis | Mean of the gravity acceleration in time along the Z-axis.
+12 | time.GravityAcc.STD.Xaxis | Standard deviation of the gravity acceleration in time along the X-axis.
+13 | time.GravityAcc.STD.Yaxis | Standard deviation of the gravity acceleration in time along the Y-axis.
+14 | time.GravityAcc.STD.Zaxis | Standard deviation of the gravity acceleration in time along the Z-axis.
+15 | time.BodyAccJerk.Mean.Xaxis | Mean of the jerk in body acceleration in time along the X-axis.
+16 | time.BodyAccJerk.Mean.Yaxis | Mean of the jerk in body acceleration in time along the Y-axis.
+17 | time.BodyAccJerk.Mean.Zaxis | Mean of the jerk in body acceleration in time along the Z-axis.
+18 | time.BodyAccJerk.STD.Xaxis | Standard deviation of the jerk in body acceleration in time along the X-axis.
+19 | time.BodyAccJerk.STD.Yaxis | Standard deviation of the jerk in body acceleration in time along the Y-axis.
+20 | time.BodyAccJerk.STD.Zaxis | Standard deviation of the jerk in body acceleration in time along the Z-axis.
+21 | time.BodyGyro.Mean.Xaxis | Mean of the body gyroscope measure in time along the X-axis.
+22 | time.BodyGyro.Mean.Yaxis | Mean of the body gyroscope measure in time along the Y-axis.
+23 | time.BodyGyro.Mean.Zaxis | Mean of the body gyroscope measure in time along the Z-axis.
+24 | time.BodyGyro.STD.Xaxis | Standard deviation of the body gyroscope measure in time along the X-axis.
+25 | time.BodyGyro.STD.Yaxis | Standard deviation of the body gyroscope measure in time along the Y-axis.
+26 | time.BodyGyro.STD.Zaxis | Standard deviation of the body gyroscope measure in time along the Z-axis.
+27 | time.BodyGyroJerk.Mean.Xaxis | Mean of the jerk in body gyroscope measure in time along the X-axis.
+28 | time.BodyGyroJerk.Mean.Yaxis | Mean of the jerk in body gyroscope measure in time along the Y-axis.
+29 | time.BodyGyroJerk.Mean.Zaxis | Mean of the jerk in body gyroscope measure in time along the Z-axis.
+30 | time.BodyGyroJerk.STD.Xaxis | Standard deviation of the jerk in body gyroscope measure in time along the X-axis.
+31 | time.BodyGyroJerk.STD.Yaxis | Standard deviation of the jerk in body gyroscope measure in time along the Y-axis.
+32 | time.BodyGyroJerk.STD.Zaxis | Standard deviation of the jerk in body gyroscope measure in time along the Z-axis.
+33 | time.BodyAccMag.Mean | Mean of the magnitude of the body acceleration in time.
+34 | time.BodyAccMag.STD | Standard deviation of the magnitude of the body acceleration in time.
+35 | time.GravityAccMag.Mean | Mean of the magnitude of the gravity acceleration in time.
+36 | time.GravityAccMag.STD | Standard deviation of the magnitude of the gravity acceleration in time.
+37 | time.BodyAccJerkMag.Mean | Mean of the magnitude of the jerk in body acceleration in time.
+38 | time.BodyAccJerkMag.STD | Standard deviation of the magnitude of the jerk in body acceleration in time.
+39 | time.BodyGyroMag.Mean | Mean of the magnitude of the body gyroscope measure in time.
+40 | time.BodyGyroMag.STD | Standard deviation of the magnitude of the body gyroscope measure in time.
+41 | time.BodyGyroJerkMag.Mean | Mean of the magnitude of the jerk in body gyroscope measure in time.
+42 | time.BodyGyroJerkMag.STD | Standard deviation of the magnitude of the jerk in body gyroscope measure in time.
+43 | freq.BodyAcc.Mean.Xaxis | Mean of the body acceleration in frequency along the X-axis.
+44 | freq.BodyAcc.Mean.Yaxis | Mean of the body acceleration in frequency along the Y-axis.
+45 | freq.BodyAcc.Mean.Zaxis | Mean of the body acceleration in frequency along the Z-axis.
+46 | freq.BodyAcc.STD.Xaxis | Standard deviation of the body acceleration in frequency along the X-axis.
+47 | freq.BodyAcc.STD.Yaxis | Standard deviation of the body acceleration in frequency along the Y-axis.
+48 | freq.BodyAcc.STD.Zaxis | Standard deviation of the body acceleration in frequency along the Z-axis.
+49 | freq.BodyAccJerk.Mean.Xaxis | Mean of the jerk in body acceleration in frequency along the X-axis.
+50 | freq.BodyAccJerk.Mean.Yaxis | Mean of the jerk in body acceleration in frequency along the Y-axis.
+51 | freq.BodyAccJerk.Mean.Zaxis | Mean of the jerk in body acceleration in frequency along the Z-axis.
+52 | freq.BodyAccJerk.STD.Xaxis | Standard deviation of the jerk in body acceleration in frequency along the X-axis.
+53 | freq.BodyAccJerk.STD.Yaxis | Stanard deviation of the jerk in body acceleration in frequency along the Y-axis.
+54 | freq.BodyAccJerk.STD.Zaxis | Standard deviation of the jerk in body acceleration in frequency along the Z-axis.
+55 | freq.BodyGyro.Mean.Xaxis | Mean of the body gyroscope measure in frequency along the X-axis.
+56 | freq.BodyGyro.Mean.Yaxis | Mean of the body gyroscope measure in frequency along the Y-axis.
+57 | freq.BodyGyro.Mean.Zaxis | Mean of the body gyroscope measure in frequency along the Z-axis.
+58 | freq.BodyGyro.STD.Xaxis | Standard deviation of the body gyroscope measure in frequency along the X-axis.
+59 | freq.BodyGyro.STD.Yaxis | Standard deviation of the body gyroscope measure in frequency along the Y-axis.
+60 | freq.BodyGyro.STD.Zaxis | Standard deviation of the body gyroscope measure in frequency along the Z-axis.
+61 | freq.BodyAccMag.Mean | Mean of the magnitude of the body acceleration in frequency.
+62 | freq.BodyAccMag.STD | Standard deviation of the magnitude of the body acceleration in frequency.
+63 | freq.BodyAccJerkMag.Mean | Mean of the magnitude of the jerk in body acceleration in frequency.
+64 | freq.BodyAccJerkMag.STD | Standard deviation of the magnitude of the jerk in body acceleration in frequency.
+65 | freq.BodyGyroMag.Mean | Mean of the magnitude of the body gyroscope measure in frequency.
+66 | freq.BodyGyroMag.STD | Standard deviation of the magnitude of the body gyroscope measure in frequency.
+67 | freq.BodyGyroJerkMag.Mean | Mean of the magnitude of the jerk in body gyroscope measure in frequency.
+68 | freq.BodyGyroJerkMag.STD | Standard deviation of the magnitude of the jerk in body gyroscope measure in frequency.
+
