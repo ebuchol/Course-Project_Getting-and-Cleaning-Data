@@ -124,7 +124,7 @@ run_analysis <- function() {
     tidyDF <- makeTidy(mergeDF)
 
   ## Write merged and tidy data frames into .txt files in the current working directory
-    write.table(tidyDF, file = "data_tidy.txt")
-    write.table(mergeDF, file = "data_merged.txt")
+    write.table(tidyDF, file = "data_tidy.txt", row.name = FALSE)
+    write.table(mergeDF, file = "data_merged.txt", row.name = FALSE)
 }
 
