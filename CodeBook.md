@@ -16,13 +16,13 @@ In order to run the analysis codes and obtain the tidy data set along with all o
     source("run_analysis.R")
     run_analysis()
 
-The above commands will execute all of the functions contained within the *"run_analysis.R"* script. For more information, see the table of information on the functions within *"run_analysis.R"* in the *"Readme.md"* file.
+The above commands will execute all of the functions contained within the *"run_analysis.R"* script. For more information, see the table of information in the *"Readme.md"* file about each of the functions within *"run_analysis.R"*.
 
 ## Brief Overview of the Human Activity Recognition Data
 Information about the Human Activity Recognition using Smartphones study can be found at the following URL:  
 http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones  
 
-The Human Activity Recognition data (contained in the zipped file https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip) represents experiments that were carried out with 30 study participants aged 19 to 48 years. Each of the study participants performed six activities (laying, sitting, standing, walking, walking downstairs, and walking upstairs) while were a Samsung Galaxy S II on his/her waist. From the phone's internal accelerometer and gyroscope, the experimenters captuered 3-axial linear acceleration and angular velocity data. The data obtained from these measurements were divided into test and training data in which the data was randomly divided into 30% and 70% of the volunteers, respectively.
+The Human Activity Recognition data (contained in the zipped file https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip) represents experiments that were carried out with 30 study participants aged 19 to 48 years. Each of the study participants performed six activities (laying, sitting, standing, walking, walking downstairs, and walking upstairs) while were a Samsung Galaxy S II on his/her waist. From the phone's internal accelerometer and gyroscope, the experimenters captured 3-axial linear acceleration and angular velocity data. The data obtained from these measurements were divided into test and training data in which the data was randomly divided into 30% and 70% of the volunteers, respectively.
 
 The 3-axial accelerometer and gyroscope measurements were divided into corresponding body movement, body jerk, and gravity measurements; this data was subsequently divided in time domain signals and frequency domain signals. The frequency domain signals were obtained by applying a Fast Fourier Transform (FFT) to some of the signals.  
 
@@ -54,17 +54,17 @@ Each column in *"data_tidy.txt"*  represents a single variable measured in the H
 
 Specifically, the data contains average values for all of the variables in the study that represent mean and standard deviation values. As such, the only variables included in this study are variables that included the use of the mean() and std() functions in their given names, which resulted in 66 variables that make up the columns of *"data_tidy.txt"*.  
 
-Steps followed in "run_analysis.R" script when the function **run_analysis()** is called:  
+### Steps followed in *"run_analysis.R"* script when the function *run_analysis()* is called:  
 1. Call function *is.installed()* which checks if the dplyr package is installed on the machine, install it if needed, then load dplyr.
 2. Call fileDownload to download the Human Activity Recognition using Smartphones data from the internet, then extract the zipped data.
 3. From the downloaded data set, the information regarding activities performed and variables measured as well as the separate test and training data are read in using the functions *readActivityLabels()*, *readFiles()*, and *readMeasures()*. In addition, the information from the activities and variables that were read are used to add *subject* and *activity* columns to both the test and training data.
 4. Call function *indexMean_STD()* to identify the column indices that correspond to only the variables generated using the *mean()* or *std()* functions. The variables measured are also renamed in order to make the variable names more descriptive and consistent.
 5. Call function *mergeData()* in order to merge the test and training data into one merged data set that includes only the column indices identified in *Step 4*. In addition, the names of the variables measured and activities performed are assigned to each of their corresponding variable/activity indices which enables the column names and the values within the activity column to be more descriptive.
-6. Call function *makeTidy()* which groups the merged data frame by activity performed and subject participant, and then calculates the average of each grouping. In this tidy data frame, each value within each column corresponds to the average measure for each variable for each subject participant performing a single activity.
+6. Call function *makeTidy()* which groups the merged data frame by activity performed and subject participant, and then calculates the average of each grouping. In this tidy data frame, each value within each column corresponds to the average measure for a given variable for each subject participant performing a single activity.
 7. Using the function *write.table()*, the tidy data set and the merged data set are written into the current working directory. The name of the tidy data set will be *"data_tidy.txt"*, and the name of the merged data set will be *"data_merged.txt"*.
 
 ### Variables (Column Names) within *"data_tidy.txt"*:
-**Note:** The accelerometer and gyroscope readings in the original study were in units of m/sec^2 and radians/sec, respectively. The values for the variables included in the raw test and training data for this study correspond to averages of the accelerometer and gyroscope readings that were normalized and bounded within the range of -1 to 1. The values within *"data_tidy.txt"* represent averages of these normalized and bounded averages.
+**Note:** The accelerometer and gyroscope readings in the original study were in units of *m/sec^2* and *radians/sec*, respectively. The values for the variables included in the raw test and training data for this study correspond to averages of the accelerometer and gyroscope readings *(originally 128 readings per measurement)* that were normalized and bounded within the range of -1 to 1. The values within *"data_tidy.txt"* represent averages of these normalized and bounded averages.
 
 Col # | Variable Name | Description
 -------- | ------------- | -----------
@@ -137,3 +137,86 @@ Col # | Variable Name | Description
 67 | freq.BodyGyroJerkMag.Mean | Mean of the magnitude of the jerk in body gyroscope measure in frequency.
 68 | freq.BodyGyroJerkMag.STD | Standard deviation of the magnitude of the jerk in body gyroscope measure in frequency.
 
+### Summary of *"data_tidy.txt"* Contents:
+The following information can be obtained in R by running these commands:
+
+    data <- read.table("data_tidy.txt", header = TRUE)
+    summary(data)
+
+**Table of Data Contents in Columns 1 and 2:**
+
+Variable | Type | Description
+-------- | :--: | -----------
+subject | integer | Values of 1 through 30 represent the individual subject participants in the study.
+activity | factor | 6 factor levels including *laying*, *sitting*, *standing*, *walking*, *walking.downstairs*, and *walking.upstairs*. Each factor level has a count of 30.
+
+**Table of Data Contents in Columns 3 through 68:**
+
+Variable                     | Type    | Minimum | 1st Qu.      | Median  | Mean    | 3rd Qu.      | Maximum
+-----------------------      | :-----: | ------: | -----------: | ------: | ------: | -----------: | ------:
+time.BodyAcc.Mean.Xaxis      | numeric | 0.2216  | 0.2712       | 0.2770  | 0.2743  | 0.2800       | 0.3015
+time.BodyAcc.Mean.Yaxis      | numeric | -0.0405 | -0.0200      | -0.0173 | -0.0179 | -0.0149      | -0.0013
+time.BodyAcc.Mean.Zaxis      | numeric |-0.1525  | -0.1121      | -0.1082 | -0.1092 | -0.1044      | -0.0754
+time.BodyAcc.STD.Xaxis       | numeric | -0.9961 | -0.9799      | -0.7526 | -0.5577 | -0.1984      | 0.6269
+time.BodyAcc.STD.Yaxis       | numeric | -0.9902 | -0.9421      | -0.5090 | -0.4605 | -0.0308      | 0.6170
+time.BodyAcc.STD.Zaxis       | numeric | 0.9877  | -0.9498      | -0.6518 | -0.5756 | -0.2306      | 0.6090
+time.GravityAcc.Mean.Xaxis   | numeric | -0.6800 | 0.8376       | 0.9208  | 0.6975  | 0.9425       | 0.9745
+time.GravityAcc.Mean.Yaxis   | numeric | -0.4800 | -0.2332      | -0.1278 | -0.0162 | 0.0877       | 0.9566
+time.GravityAcc.Mean.Zaxis   | numeric | -0.4951 | -0.1173      | 0.0238  | 0.0741  | 0.1495       | 0.9579
+time.GravityAcc.STD.Xaxis    | numeric | -0.9968 | -0.9825      | -0.9695 | -0.9638 | -0.9509      | -0.8296
+time.GravityAcc.STD.Yaxis    | numeric | -0.9942 | -0.9711      | -0.9590 | -0.9524 | -0.9370      | -0.6436
+time.GravityAcc.STD.Zaxis    | numeric | -0.9910 | -0.9605      | -0.9450 | -0.9364 | -0.9180      | -0.6102
+time.BodyAccJerk.Mean.Xaxis  | numeric | 0.0427  | 0.0740       | 0.0764  | 0.0795  | 0.0833       | 0.1302
+time.BodyAccJerk.Mean.Yaxis  | numeric | -0.0387 | 0.0005       | 0.0095  | 0.0076  | 0.0134       | 0.0568
+time.BodyAccJerk.Mean.Zaxis  | numeric | -0.0675 | -0.0106      | -0.0039 | -0.0050 | 0.0020       | 0.0381
+time.BodyAccJerk.STD.Xaxis   | numeric | -0.9946 | -0.9832      | -0.8104 | -0.5949 | -0.2233      | 0.5443
+time.BodyAccJerk.STD.Yaxis   | numeric | -0.9895 | -0.9724      | -0.7756 | -0.5654 | -0.1483      | 0.3553
+time.BodyAccJerk.STD.Zaxis   | numeric | -0.9933 | -0.9827      | -0.8837 | -0.7360 | -0.5121      | 0.0310
+time.BodyGyro.Mean.Xaxis     | numeric | -0.2058 | -0.0471      | -0.0287 | -0.0324 | -0.0168      | 0.1927
+time.BodyGyro.Mean.Yaxis     | numeric | -0.2042 | -0.0900      | -0.0732 | -0.0743 | -0.0611      | 0.0275
+time.BodyGyro.Mean.Zaxis     | numeric | -0.0725 | 0.0748       | 0.0851  | 0.0874  | 0.1018       | 0.1791
+time.BodyGyro.STD.Xaxis      | numeric | -0.9943 | -0.9735      | -0.7890 | -0.6916 | -0.4414      | 0.2677
+time.BodyGyro.STD.Yaxis      | numeric | -0.9942 | -0.9629      | -0.8017 | -0.6533 | -0.4196      | 0.4765
+time.BodyGyro.STD.Zaxis      | numeric | -0.9855 | -0.9609      | -0.8010 | -0.6164 | -0.3106      | 0.5649
+time.BodyGyroJerk.Mean.Xaxis | numeric | -0.1572 | -0.1032      | -0.0987 | -0.0961 | -0.0911      | -0.0221
+time.BodyGyroJerk.Mean.Yaxis | numeric | -0.0768 | -0.0455      | -0.0411 | -0.0427 | -0.0384      | -0.0132
+time.BodyGyroJerk.Mean.Zaxis | numeric | -0.0925 | -0.0617      | -0.0534 | -0.0548 | -0.0490      | -0.0069
+time.BodyGyroJerk.STD.Xaxis  | numeric | -0.9965 | -0.9800      | -0.8396 | -0.7036 | -0.4629      | 0.1791
+time.BodyGyroJerk.STD.Yaxis  | numeric | -0.9971 | -0.9832      | -0.8942 | -0.7636 | -0.5861      | 0.2959
+time.BodyGyroJerk.STD.Zaxis  | numeric | -0.9954 | -0.9848      | -0.8610 | -0.7096 | -0.4741      | 0.1932
+time.BodyAccMag.Mean         | numeric | -0.9865 | -0.9573      | -0.4829 | -0.4973 | -0.0919      | 0.6446
+time.BodyAccMag.STD          | numeric | -0.9865 | -0.9430      | -0.6074 | -0.5439 | -0.2090      | 0.4284
+time.GravityAccMag.Mean      | numeric | -0.9865 | -0.9573      | -0.4829 | -0.4973 | -0.0919      | 0.6446
+time.GravityAccMag.STD       | numeric | -0.9865 | -0.9430      | -0.6074 | -0.5439 | -0.2090      | 0.4284
+time.BodyAccJerkMag.Mean     | numeric | -0.9928 | -0.9807      | -0.8168 | -0.6079 | -0.2456      | 0.4345
+time.BodyAccJerkMag.STD      | numeric | -0.9946 | -0.9765      | -0.8014 | -0.5842 | -0.2173      | 0.4506
+time.BodyGyroMag.Mean        | numeric | -0.9807 | -0.9461      | -0.6551 | -0.5652 | -0.2159      | 0.4180
+time.BodyGyroMag.STD         | numeric | -0.9814 | -0.9476      | -0.7420 | -0.6304 | -0.3602      | 0.3000
+time.BodyGyroJerkMag.Mean    | numeric | -0.9973 | -0.9852      | -0.8648 | -0.7364 | -0.5119      | 0.0876
+time.BodyGyroJerkMag.STD     | numeric | -0.9977 | -0.9805      | -0.8809 | -0.7550 | -0.5767      | 0.2502
+freq.BodyAcc.Mean.Xaxis      | numeric | -0.9952 | -0.9787      | -0.7691 | -0.5758 | -0.2174      | 0.5370
+freq.BodyAcc.Mean.Yaxis      | numeric | -0.9890 | -0.9536      | -0.5950 | -0.4887 | -0.0634      | 0.5242
+freq.BodyAcc.Mean.Zaxis      | numeric | -0.9895 | -0.9619      | -0.7236 | -0.6297 | -0.3183      | 0.2807
+freq.BodyAcc.STD.Xaxis       | numeric | -0.9966 | -0.9820      | -0.7470 | -0.5522 | -0.1966      | 0.6585
+freq.BodyAcc.STD.Yaxis       | numeric | -0.9907 | -0.9404      | -0.5134 | -0.4815 | -0.0791      | 0.5602
+freq.BodyAcc.STD.Zaxis       | numeric | -0.9872 | -0.9459      | -0.6441 | -0.5824 | -0.2655      | 0.6871
+freq.BodyAccJerk.Mean.Xaxis  | numeric | -0.9946 | -0.9828      | -0.8126 | -0.6139 | -0.2820      | 0.4743
+freq.BodyAccJerk.Mean.Yaxis  | numeric | -0.9894 | -0.9725      | -0.7817 | -0.5882 | -0.1963      | 0.2767
+freq.BodyAccJerk.Mean.Zaxis  | numeric | -0.9920 | -0.9796      | -0.8707 | -0.7144 | -0.4697      | 0.1578
+freq.BodyAccJerk.STD.Xaxis   | numeric | -0.9951 | -0.9847      | -0.8254 | -0.6121 | -0.2475      | 0.4768
+freq.BodyAccJerk.STD.Yaxis   | numeric | -0.9905 | -0.9737      | -0.7852 | -0.5707 | -0.1685      | 0.3498
+freq.BodyAccJerk.STD.Zaxis   | numeric | -0.9931 | -0.9837      | -0.8951 | -0.7565 | -0.5438      | -0.0062
+freq.BodyGyro.Mean.Xaxis     | numeric | -0.9931 | -0.9697      | -0.7300 | -0.6367 | -0.3387      | 0.4750
+freq.BodyGyro.Mean.Yaxis     | numeric | -0.9940 | -0.9700      | -0.8141 | -0.6767 | -0.4458      | 0.3288
+freq.BodyGyro.Mean.Zaxis     | numeric | -0.9860 | -0.9624      | -0.7909 | -0.6044 | -0.2635      | 0.4924
+freq.BodyGyro.STD.Xaxis      | numeric | -0.9947 | -0.9750      | -0.8086 | -0.7110 | -0.4813      | 0.1966
+freq.BodyGyro.STD.Yaxis      | numeric | -0.9944 | -0.9602      | -0.7964 | -0.6454 | -0.4154      | 0.6462
+freq.BodyGyro.STD.Zaxis      | numeric | -0.9867 | -0.9643      | -0.8224 | -0.6577 | -0.3916      | 0.5225
+freq.BodyAccMag.Mean         | numeric | -0.9868 | -0.9560      | -0.6703 | -0.5365 | -0.1622      | 0.5866
+freq.BodyAccMag.STD          | numeric | -0.9876 | -0.9452      | -0.6513 | -0.6210 | -0.3654      | 0.1787
+freq.BodyAccJerkMag.Mean     | numeric | -0.9940 | -0.9770      | -0.7940 | -0.5756 | -0.1872      | 0.5384
+freq.BodyAccJerkMag.STD      | numeric | -0.9944 | -0.9752      | -0.8126 | -0.5992 | -0.2668      | 0.3163
+freq.BodyGyroMag.Mean        | numeric | -0.9865 | -0.9616      | -0.7657 | -0.6671 | -0.4087      | 0.2040
+freq.BodyGyroMag.STD         | numeric | -0.9815 | -0.9488      | -0.7727 | -0.6723 | -0.4277      | 0.2367
+freq.BodyGyroJerkMag.Mean    | numeric | -0.9976 | -0.9813      | -0.8779 | -0.7564 | -0.5831      | 0.1466
+freq.BodyGyroJerkMag.STD     | numeric | -0.9976 | -0.9802      | -0.8941 | -0.7715 | -0.6081      | 0.2878
